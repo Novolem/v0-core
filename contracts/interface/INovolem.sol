@@ -27,6 +27,7 @@ interface INovolem {
 	function updateEmissionRate(uint256 _emissionRate) external;
 	function updateMinimumManagerHolding(uint256 _minimumManagerHolding) external;
 	function updateLimitManagers(bool _limitManagers) external;
+	function updateNovolemToken(address _novolemToken) external;
 	function clawbackEmission() external;
 	function setManagers(address[10] calldata _managers) external;
 	function pause() external;

@@ -81,6 +81,11 @@ contract Novolem is Context {
 		if (_msgSender() != owner) revert NovolemError.NotOwner();
 		limitManagers = _limitManagers;
 	}
+	function updateNovolemToken(address _novolemToken) public {
+		if (_msgSender() != owner) revert NovolemError.NotOwner();
+		novolemToken = _novolemToken;
+		novolemTokenDecimals = ERC20(_novolemToken).decimals();
+	}
 	function clawbackEmission() external {
 		if (_msgSender() != owner) revert NovolemError.NotOwner();
 		uint256 currentEmission = IERC20(novolemToken).balanceOf(address(this));
