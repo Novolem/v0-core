@@ -12,7 +12,7 @@ module.exports = {
     settings: {
       optimizer: {
         enabled: true,
-        runs: 100,
+        runs: 200,
       },
     },
   },
@@ -26,6 +26,10 @@ module.exports = {
     },
     base_testnet: {
       url: "	https://sepolia.base.org",
+      accounts: [process.env.OWNER_PRIVATE_KEY],
+    },
+    polygon_zkevm: {
+      url: "https://zkevm-rpc.com",
       accounts: [process.env.OWNER_PRIVATE_KEY],
     }
   },

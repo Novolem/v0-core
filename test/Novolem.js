@@ -425,9 +425,7 @@ describe("Novolem", function () {
 			expect(await transactionToken.balanceOf(manager2Address)).to.equal(bountyCommission);
 			expect(await transactionToken.balanceOf(client2Address)).to.equal(ethers.parseUnits("0", TRANSACTION_TOKEN_DECIMALS));
 			expect(await investmentToken.balanceOf(client2Address)).to.equal(expectedEmission);
-			expect(await investmentToken.balanceOf(manager2)).to.equal(
-				expectedEmission + ethers.parseUnits(String(MINIMUM_MANAGER_HOLDING_2), INVESTMENT_TOKEN_DECIMALS)
-			);
+			expect(await investmentToken.balanceOf(manager2)).to.equal(ethers.parseUnits(String(MINIMUM_MANAGER_HOLDING_2), INVESTMENT_TOKEN_DECIMALS));
 		});
 	});
 
@@ -490,7 +488,7 @@ describe("Novolem", function () {
 					bountyMetadataUrl2,
 					ethers.parseUnits(BOUNTY_3_REWARD, TRANSACTION_TOKEN_DECIMALS),
 					ethers.parseUnits(BOUNTY_3_COMMISSION, TRANSACTION_TOKEN_DECIMALS),
-					0 // Emission should be 0 as EMISSION_RATE_3 is 0
+					ethers.parseUnits(String(EMISSION_RATE_3 * BOUNTY_3_REWARD), INVESTMENT_TOKEN_DECIMALS)
 				);
 
 			// Check bounty details
@@ -501,7 +499,7 @@ describe("Novolem", function () {
 			expect(bounty2.metadataUrl).to.equal(bountyMetadataUrl2);
 			expect(bounty2.reward).to.equal(ethers.parseUnits(BOUNTY_3_REWARD, TRANSACTION_TOKEN_DECIMALS));
 			expect(bounty2.commission).to.equal(ethers.parseUnits(BOUNTY_3_COMMISSION, TRANSACTION_TOKEN_DECIMALS));
-			expect(bounty2.emission).to.equal(0); // Emission is 0
+			expect(bounty2.emission).to.equal(ethers.parseUnits(String(EMISSION_RATE_3 * BOUNTY_3_REWARD), INVESTMENT_TOKEN_DECIMALS));
 			expect(bounty2.winner).to.equal(ethers.ZeroAddress);
 			expect(bounty2.status).to.equal(0); // ACTIVE
 
@@ -553,6 +551,7 @@ describe("Novolem", function () {
 				);
 
 			const initialManagerBalance = await transactionToken.balanceOf(manager3Address);
+			const initialManagerInvestmentBalance = await investmentToken.balanceOf(manager3Address);
 
 			// Client creates a bounty
 			await novolem
@@ -587,8 +586,7 @@ describe("Novolem", function () {
 				ethers.parseUnits(String(EMISSION_RATE_3 * BOUNTY_3_REWARD), INVESTMENT_TOKEN_DECIMALS)
 			);
 			expect(await investmentToken.balanceOf(manager3Address)).to.equal(
-				ethers.parseUnits(String(EMISSION_RATE_3 * BOUNTY_3_COMMISSION), INVESTMENT_TOKEN_DECIMALS) +
-					ethers.parseUnits(String(MINIMUM_MANAGER_HOLDING_3), INVESTMENT_TOKEN_DECIMALS)
+				ethers.parseUnits(String(EMISSION_RATE_3 * BOUNTY_3_REWARD), INVESTMENT_TOKEN_DECIMALS) + initialManagerInvestmentBalance
 			);
 		});
 	});
@@ -616,18 +614,8 @@ describe("Novolem", function () {
 			const { novolem, accounts } = deployedContracts;
 			const worker2 = accounts[accountMapping.worker2];
 			const worker2Address = await worker2.getAddress();
-			const managers = [
-				worker2Address,
-				ethers.ZeroAddress,
-				ethers.ZeroAddress,
-				ethers.ZeroAddress,
-				ethers.ZeroAddress,
-				ethers.ZeroAddress,
-				ethers.ZeroAddress,
-				ethers.ZeroAddress,
-				ethers.ZeroAddress,
-				ethers.ZeroAddress
-			];
+			const managers = Array(10).fill(ethers.ZeroAddress);
+			managers[0] = worker2Address;
 			await expect(novolem.connect(worker2).setManagers(managers)).to.be.revertedWithCustomError(novolem, "NotOwner");
 		});
 		it("should not allow client to create bounty with invalid manager", async function () {
@@ -710,7 +698,6 @@ describe("Novolem", function () {
 			expect(await transactionToken.balanceOf(manager4Address)).to.equal(bountyCommission);
 			expect(await transactionToken.balanceOf(client4Address)).to.equal(ethers.parseUnits("0", TRANSACTION_TOKEN_DECIMALS));
 			expect(await investmentToken.balanceOf(client4Address)).to.equal(expectedEmission);
-			expect(await investmentToken.balanceOf(manager4Address)).to.equal(expectedEmission);
 		});
 	});
 

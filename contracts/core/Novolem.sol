@@ -197,7 +197,6 @@ contract Novolem is Context {
 
 		// Transfer emission to manager & creator
 		if (bounty.emission > 0) {
-			IERC20(novolemToken).transfer(bounty.manager, bounty.emission);
 			IERC20(novolemToken).transfer(bounty.creator, bounty.emission);
 		}
 
