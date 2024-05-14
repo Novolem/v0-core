@@ -8,7 +8,6 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {NovolemError} from "../library/Error.sol";
 import {NovolemStructure} from "../library/Structure.sol";
 import {TokenMath} from "../library/TokenMath.sol";
-import "hardhat/console.sol";
 
 contract Novolem is Context {
 	bool public initialized;
