@@ -173,7 +173,9 @@ contract Novolem is Context {
 		bounty.status = NovolemStructure.BountyStatus.REFUNDED;
 
 		IERC20(transactionToken).transfer(bounty.creator, bounty.reward);
-		IERC20(transactionToken).transfer(bounty.manager, bounty.commission);
+		if (bounty.commission > 0) {
+			IERC20(transactionToken).transfer(bounty.manager, bounty.commission);
+		}
 		emit RefundBounty(_bountyId);
 	}
 
