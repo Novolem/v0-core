@@ -1,7 +1,7 @@
 # Novolem Protocol V0
 This repository contains the core smart contracts for the Novolem V0 Protocol.
 
-[![Novolem V0](https://www.novolem.com/assets/novolem-v0-banner.png)](https://novolem.com)
+[![Novolem V0](https://res.cloudinary.com/dkpry5cup/image/upload/f_auto,q_auto/v1/novolem-assets/gf0uvia1dj19dbrxc1ma)](https://novolem.com)
 
 ## Requirements
 - Node.js 18.0.0 or later
